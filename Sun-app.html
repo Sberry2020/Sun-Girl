@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+  crossorigin="anonymous"
+/>
+<link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>By Matt</title>
+  <style>
+    .card {
+width: 600px;
+margin: 60px;
+padding: 25px;
+background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+    }
+    ul {
+        list-style: none;
+    }
+    .container{
+      font-family: 'Courgette', cursive;
+      color: blue;
+     }
+     h1 {
+      font-family: 'Courgette', cursive;
+   color: red;
+     }
+    
+     img {
+position: relative;
+left: 260px;
+     }
+     .float-left {
+       font-size: 55px;
+       color: red;
+     }
+     #description{
+       color:darkgreen;
+     }
+  </style>
+  
+</head>
+<body>
+    <div class="container">
+      <div class="weather-app">
+        <div class="card">
+          <div class="card-body">
+        <form class="search-form" id="search-form">
+          <div class="row">
+            <div class="col-6">
+              <input type="search" placeholder="Type a city.." autofocus="on" autocomplete="off" id="city-input" class="form-control shadow-sm">
+            </div>
+            <div class="col-3">
+              <input type="submit" value="Search" class="form-control btn btn-primary shadow-sm w-100">
+            </div>
+            <div class="col-3">
+              <button class="btn btn-success w-100" id="current-location-button">
+                Current
+              </button>
+            </div>
+          </div>
+        </form>
+        <h1 id="city"> </h1>
+        
+        <ul>
+          <li id="date"></li>
+          <li id="description"></li>
+        </ul>
+        <div class="row">
+          <div class="col-6">
+            <div class="clearfix">
+              <div class="float-left">
+                <span class="temperature" id="temperature"></span><span class="units">°C</span>
+              </div>
+            </div>
+          </div>
+       
+          <div class="col-6">
+            <ul>
+              <li>Humidity: <span id="humidity"></span>%</li>
+              <li>Wind: <span id="wind"></span> km/h</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+function displayWeather(response){
+  document.querySelector("#city").innerHTML = response.data.name;
+ document.querySelector("#temperature").innerHTML = Math.round (response.data.main.temp
+  );
+  document.querySelector("#humidity").innerHTML = response.data.main.humidity;
+  document.querySelector("#wind").innerHTML = Math.round(
+    response.data.wind.speed
+  );
+  document.querySelector("#description").innerHTML = response.data.weather[0].main;
+  
+}
+function searchCity(city) {
+let apiKey = "06a1d6c3ead33874990439f7caba79d9";
+   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+   axios.get(apiUrl).then(displayWeather);
+}
+function form(event){ 
+  event.preventDefault()
+ let city = document.querySelector("#city-input").value;
+searchCity(city);
+}
+
+let dateElement = document.querySelector("#date");
+let currentTime = new Date();
+dateElement.innerHTML = `${currentTime}`;
+
+let searchButton = document.querySelector("#search-form");
+searchButton.addEventListener("submit", form);
+
+searchCity(`Almaty`);
+
+
+
+
+function showCurrentLocation(position){
+  let latitude = position.coords.latitude;
+  let longitude = position.coords.longitude;
+let key = "06a1d6c3ead33874990439f7caba79d9";
+let urlApi = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`;
+
+axios.get(urlApi).then(displayWeather);
+
+}
+
+function current(event){
+  event.preventDefault();
+  navigator.geolocation.getCurrentPosition(showCurrentLocation);
+}
+
+let button = document.querySelector("#current-location-button");
+button.addEventListener("click", current) 
+    </script>
+</body>
+</html>
