@@ -49,6 +49,12 @@ color:  rgb(255, 115, 0);
      #description{
        color:darkgreen;
      }
+     .git-link{
+       margin: 40px;
+     }
+     h5{
+       color: green;
+     }
   </style>
   
 </head>
@@ -99,9 +105,11 @@ color:  rgb(255, 115, 0);
       </div>
     </div>
   </div>
+  <div class = "git-link">
   <a href="https://github.com/Sberry2020/Sun-Girl/blob/main/index.html"> Open-sourse code </a><h5>
     by Aksana Kurbanova
   </h5>
+</div>
   <script>
 function displayWeather(response){
   document.querySelector("#city").innerHTML = response.data.name;
